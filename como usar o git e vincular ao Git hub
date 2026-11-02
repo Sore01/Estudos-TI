@@ -1,0 +1,104 @@
+como usar o git e vincular ao Git hub: 
+
+Criei o repositório Git local
+No IntelliJ: Git → Create Git Repository (ou VCS → Create Git Repository).
+Selecionei a pasta do projeto (untitled1), a que tem .idea e src dentro. Não entrei em nenhuma subpasta.
+Isso cria uma pasta oculta .git na raiz. É normal.
+Ajustei o .gitignore
+O IntelliJ já tinha criado um .gitignore na raiz (a "raiz" é a pasta untitled1, ao lado de .idea e src).
+Não apaguei nada. Só acrescentei no final do arquivo:
+     ### Configurações pessoais do IntelliJ ###
+     .idea/
+     *.iml
+
+     ### Maven / Gradle (caso usem) ###
+     target/
+     build/
+     .gradle/
+Motivo: .idea/ e *.iml são configurações pessoais e dão conflito entre duas pessoas.
+Fiz o primeiro commit
+Ctrl+K, marquei os arquivos (src e .gitignore), mensagem: Primeiro commit, cliquei em Commit.
+O Git pediu nome e e-mail (aparece uma vez só). Preenchi nome erosd e o e-mail do GitHub, deixei Set properties globally marcado e cliquei em Set and Commit.
+Atenção: até aqui o código estava só no meu computador, ainda não no GitHub.
+Abri a tela de compartilhar no GitHub
+Git → GitHub → Share Project on GitHub.
+Repository name: projeto-estudo-java
+Remote: origin
+O campo Share by estava vazio e o botão Share bloqueado, porque ainda não havia conta do GitHub ligada ao IntelliJ.
+PARTE 2: O que falta fazer
+Ligar minha conta do GitHub ao IntelliJ
+Na janela Share Project: clique em Add account → Log In via GitHub.
+O navegador abre, entre no GitHub e clique em Authorize. Volte ao IntelliJ.
+Se não funcionar, use o token: no GitHub, Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (classic), marque repo e workflow, copie o token. No IntelliJ: Add account → Log In with Token e cole.
+Não tem conta? Crie em github.com (é grátis).
+Marcar Private (opcional, mas recomendado) e clicar em Share.
+Ele cria o repositório no GitHub e envia o commit (push).
+Conferir no navegador se os arquivos apareceram.
+Convidar meu amigo
+No GitHub: abra o repositório → Settings → Collaborators → Add people.
+Digitar o usuário do GitHub dele. Ele precisa aceitar o convite.
+Meu amigo baixa o projeto
+No IntelliJ dele: tela inicial → Get from VCS → colar a URL do repositório → Clone.
+Ele também precisa ter a conta do GitHub ligada ao IntelliJ (File → Settings → Version Control → GitHub).
+PARTE 3: Rotina de cada dia
+Pull (Ctrl+T): pega o que o outro enviou. Sempre antes de começar.
+Programar.
+Commit (Ctrl+K): mensagem clara, por exemplo Adiciona endpoint de login.
+Pull de novo (Ctrl+T).
+Push (Ctrl+Shift+K): envia para o GitHub.
+Atalhos do IntelliJ
+Atalho	O que faz
+Ctrl + K	Commit
+Ctrl + Shift + K	Push
+Ctrl + T	Pull / Update
+Alt + F12	Terminal
+Alt + 9	Janela do Git
+PARTE 4: Branches (para não atropelar um ao outro)
+
+Sugestão: main (estável), backend (eu), frontend (meu amigo).
+
+No IntelliJ: clicar no nome do branch no canto inferior direito → New Branch.
+Juntar trabalho: Merge into Current ou Pull Request no GitHub.
+bash
+git branch                    # lista branches
+git checkout -b backend       # cria e troca
+git switch backend            # troca de branch
+git merge frontend            # junta frontend no branch atual
+git push -u origin backend    # envia branch nova (1ª vez)
+git branch -d backend         # apaga branch
+PARTE 5: Comandos úteis (terminal)
+bash
+git config --global user.name "Nome"
+git config --global user.email "email@exemplo.com"
+
+git init                      # cria repositório
+git clone <url>               # baixa repositório
+git remote add origin <url>   # liga ao GitHub
+git remote -v                 # mostra remotos
+
+git status                    # o que mudou
+git add .                     # prepara tudo
+git commit -m "mensagem"      # salva a versão
+git pull                      # baixa e junta
+git push                      # envia
+git log --oneline             # histórico resumido
+git diff                      # ver diferenças
+
+git restore arquivo.java      # descarta mudanças não salvas
+git restore --staged arquivo  # tira do add
+git reset --soft HEAD~1       # desfaz o último commit, mantém o código
+git revert <hash>             # desfaz um commit com segurança
+git stash                     # guarda mudanças
+git stash pop                 # recupera o que guardou
+
+Cuidado: evite git push --force e git reset --hard. Podem apagar o trabalho meu ou do meu amigo.
+
+PARTE 6: Se der problema
+Conflito (nós dois mexemos na mesma linha): o IntelliJ abre um editor com 3 colunas (minha versão, a do outro e o resultado). Escolher o que fica e clicar em Apply.
+Push recusado: fazer Pull (Ctrl+T) primeiro e depois o push de novo.
+.idea apareceu no commit: desmarcar na janela de commit. Se já foi enviado antes, rodar git rm -r --cached .idea.
+Menu Git não aparece: o repositório não foi criado. Refazer o passo 1 da Parte 1.
+Dicas
+Commits pequenos e frequentes dão menos conflito.
+Combinar com o amigo quem mexe em quais pastas/classes para não editarem o mesmo arquivo.
+Mensagens boas: Adiciona endpoint de login. Ruins: mudanças.
